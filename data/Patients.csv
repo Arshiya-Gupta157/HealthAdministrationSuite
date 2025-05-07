@@ -1,0 +1,24 @@
+PatientID,Name,Age,Gender,Illness,EmergencyContact,Vegetarian,NumberOfVisits,WasAdmittedBefore
+100,Aarav Sharma,28,Male,Fever,9876543210,true,2,false
+101,Sanya Mehra,34,Female,Back Pain,9898989898,false,5,true
+102,Rohan Gupta,45,Male,Diabetes,9123456780,true,10,true
+103,Kritika Singh,23,Female,Cold,9988776655,false,1,false
+104,Vedant Jain,31,Male,Headache,9876541230,true,3,false
+105,Ishita Khanna,40,Female,Asthma,9765432109,false,8,true
+106,Yuvraj Malhotra,37,Male,Fracture,9090909090,true,6,true
+107,Meera Bansal,29,Female,Migraine,9345612789,false,4,false
+108,Ritika Agarwal,26,Female,Allergy,9456123780,true,2,false
+109,Dev Patel,52,Male,Hypertension,9988771122,false,12,true
+110,Neha Verma,33,Female,Thyroid,9876512345,true,6,true
+111,Ankit Deshmukh,46,Male,Arthritis,9812345678,false,9,true
+112,Tanvi Arora,22,Female,Stomach Ache,9888888888,true,1,false
+113,Harshit Kapoor,39,Male,Chest Pain,9765123487,false,5,true
+114,Simran Dey,27,Female,Fever,9823456781,true,3,false
+115,Rajeev Nair,60,Male,Heart Disease,9745632189,false,15,true
+116,Avni Batra,35,Female,Cough,9798798798,true,4,false
+117,Karan Sethi,42,Male,Obesity,9632587412,false,7,true
+118,Aisha Qureshi,30,Female,PCOD,9876549876,true,2,false
+119,Manav Chauhan,38,Male,Skin Rash,9123456712,true,3,false
+120,Divya Rathi,24,Female,Anxiety,9900112233,false,1,false
+121,arshi,22,Female,Cough,9900112233,true,2,false
+122,arshi,12,Fe,fever,543,true,1,false

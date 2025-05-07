@@ -1,0 +1,32 @@
+Category,ItemName,Price
+lunch,Paneer Curry,80.0
+lunch,Dal Tadka,60.0
+lunch,Chole Bhature,70.0
+lunch,Veg Biryani,90.0
+lunch,Rajma Chawal,65.0
+lunch,Mix Veg,70.0
+drinks,Tea,10.0
+drinks,Coffee,15.0
+drinks,Lassi,20.0
+drinks,Buttermilk,12.0
+drinks,Coconut Water,30.0
+drinks,Orange Juice,30.0
+breakfast,Poha,30.0
+breakfast,Sandwich,40.0
+breakfast,Idli,35.0
+breakfast,Paratha,45.0
+breakfast,Upma,32.0
+breakfast,Dosa,50.0
+breakfast,Bread Jam,20.0
+snacks,Chips,20.0
+snacks,Samosa,15.0
+snacks,Kachori,18.0
+snacks,Puffs,25.0
+snacks,Pakora,22.0
+snacks,Aloo Tikki,20.0
+dinner,Noodles,50.0
+dinner,Rice,40.0
+dinner,Chapati Sabzi,60.0
+dinner,Fried Rice,55.0
+dinner,Khichdi,45.0
+dinner,Veg Thali,100.0
