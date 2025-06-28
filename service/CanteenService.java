@@ -1,8 +1,17 @@
 package HospitalManagement.service;
 
 import HospitalManagement.model.CanteenItem;
-import java.util.*;
-import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class CanteenService {
     private Map<String, List<CanteenItem>> menuByCategory = new HashMap<>();
@@ -71,21 +80,11 @@ public class CanteenService {
 
     public void manageCanteen() {
         System.out.println("\n--- Welcome to the Canteen ---");
-        System.out.print("Are you a:\n1. Manager\n2. Customer\nEnter choice (1 or 2): ");
-        int role = scanner.nextInt();
-        scanner.nextLine();
-
-        if (role == 1) {
-            manageCanteenAsManager();
-        } else if (role == 2) {
             manageCanteenAsCustomer();
-        } else {
-            System.out.println("Invalid role selected.");
-        }
     }
 
     // ---------- Manager Flow ----------
-    private void manageCanteenAsManager() {
+    public void manageCanteenAsManager() {
         int choice;
         do {
             System.out.println("\n--- CANTEEN MANAGER MENU ---");
@@ -110,8 +109,8 @@ public class CanteenService {
     }
 
     private void addItem() {
-        System.out.print("Enter category (Snacks/Breakfast/Lunch/Dinner): ");
-        String category = scanner.nextLine();
+        System.out.print("Enter category (Snacks/Breakfast/Lunch/Dinner/Drinks): ");
+        String category = scanner.nextLine().toLowerCase();
 
         System.out.print("Enter item name: ");
         String name = scanner.nextLine();
@@ -128,7 +127,7 @@ public class CanteenService {
 
     private void deleteItem() {
         System.out.print("Enter category: ");
-        String category = scanner.nextLine();
+        String category = scanner.nextLine().toLowerCase();
         if (!menuByCategory.containsKey(category)) {
             System.out.println("Category not found.");
             return;
@@ -148,33 +147,53 @@ public class CanteenService {
     }
 
     private void updateItem() {
-        System.out.print("Enter category: ");
-        String category = scanner.nextLine();
-        if (!menuByCategory.containsKey(category)) {
-            System.out.println("Category not found.");
+    System.out.print("Enter category: ");
+    String category = scanner.nextLine().trim();
+
+    if (!menuByCategory.containsKey(category)) {
+        System.out.println("Category not found.");
+        return;
+    }
+
+    showCategoryMenu(category);
+
+    System.out.print("Enter item name to update: ");
+    String name = scanner.nextLine().trim();
+
+    for (CanteenItem item : menuByCategory.get(category)) {
+        if (item.getName().equalsIgnoreCase(name)) {
+            String oldName = item.getName();
+            double oldPrice = item.getPrice();
+
+            System.out.print("Enter new name [" + oldName + "]: ");
+            String newName = scanner.nextLine().trim();
+            if (newName.isEmpty()) {
+                newName = oldName;
+            }
+
+            System.out.print("Enter new price [" + oldPrice + "]: ");
+            String priceInput = scanner.nextLine().trim();
+            double newPrice = oldPrice;
+            if (!priceInput.isEmpty()) {
+                try {
+                    newPrice = Double.parseDouble(priceInput);
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Price unchanged.");
+                }
+            }
+
+            menuByCategory.get(category).remove(item);
+            menuByCategory.get(category).add(new CanteenItem(newName, newPrice));
+
+            System.out.println("✅ Item updated.");
+            saveMenuToCSV();
             return;
         }
-
-        showCategoryMenu(category);
-        System.out.print("Enter item name to update: ");
-        String name = scanner.nextLine();
-
-        for (CanteenItem item : menuByCategory.get(category)) {
-            if (item.getName().equalsIgnoreCase(name)) {
-                System.out.print("Enter new name: ");
-                String newName = scanner.nextLine();
-                System.out.print("Enter new price: ");
-                double newPrice = scanner.nextDouble();
-                scanner.nextLine();
-                menuByCategory.get(category).remove(item);
-                menuByCategory.get(category).add(new CanteenItem(newName, newPrice));
-                System.out.println("Item updated.");
-                saveMenuToCSV();
-                return;
-            }
-        }
-        System.out.println("Item not found.");
     }
+
+    System.out.println("Item not found.");
+}
+
 
     private void showFullMenu() {
         if (menuByCategory.isEmpty()) {

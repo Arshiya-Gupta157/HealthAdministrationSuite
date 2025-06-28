@@ -19,6 +19,3 @@ PatientID,Name,Age,Gender,Illness,EmergencyContact,Vegetarian,NumberOfVisits,Was
 117,Karan Sethi,42,Male,Obesity,9632587412,false,7,true
 118,Aisha Qureshi,30,Female,PCOD,9876549876,true,2,false
 119,Manav Chauhan,38,Male,Skin Rash,9123456712,true,3,false
-120,Divya Rathi,24,Female,Anxiety,9900112233,false,1,false
-121,arshi,22,Female,Cough,9900112233,true,2,false
-122,arshi,12,Fe,fever,543,true,1,false

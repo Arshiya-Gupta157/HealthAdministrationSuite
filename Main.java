@@ -2,6 +2,7 @@ package HospitalManagement;
 
 import HospitalManagement.model.*;
 import HospitalManagement.service.*;
+
 import java.util.Scanner;
 
 public class Main {
@@ -9,16 +10,16 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         PatientService patientService = new PatientService();
         CanteenService canteenService = new CanteenService();
+        PharmacyServices pharmacyServices = new PharmacyServices();
 
         int choice;
         do {
-            System.out.println("\n==== HEALTH ADMINISTRATION SUITE MENU ====");
+            System.out.println("\n==== HEALTHCARE ADMINISTRATION SUITE MENU ====");
             System.out.println("1. Administrator");
-            System.out.println("1. Doctor/Staff");
-            System.out.println("2. Patient");
-            System.out.println("3. Canteen Manager");
-            System.out.println("4. Explore More: Pharmacy, Vehicles, Rooms");
-            System.out.println("5. Visitors");
+            System.out.println("2. Doctor");
+            System.out.println("3. Patient");
+            System.out.println("4. Canteen");
+            System.out.println("5. Pharmacy");
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
 
@@ -26,7 +27,7 @@ public class Main {
             scanner.nextLine();
 
             switch (choice) {
-                
+
                 case 1:
                     AdminServices adminServices = new AdminServices();
                     adminServices.adminMenuManagement();
@@ -37,16 +38,13 @@ public class Main {
                     doctorService.manageStaff();
                     break;
                 case 3:
-                    patientService.managePatients(); 
+                    patientService.managePatients();
                     break;
                 case 4:
                     canteenService.manageCanteen();
                     break;
                 case 5:
-                    // hospitalService.exploreMore();
-                    break;
-                case 6:
-                    // hospitalService.handleVisitors();
+                    pharmacyServices.customerMenu();
                     break;
                 case 0:
                     System.out.println("Exiting system. Goodbye!");
@@ -59,4 +57,3 @@ public class Main {
         scanner.close();
     }
 }
-

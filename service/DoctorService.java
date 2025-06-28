@@ -3,11 +3,21 @@ package HospitalManagement.service;
 import HospitalManagement.model.Appointment;
 import HospitalManagement.model.Patient;
 import HospitalManagement.model.Doctor;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Arrays;
 /**
  * DoctorService.java
  * 
@@ -73,15 +83,18 @@ class PatientBST {
     }
 
     private Node deleteRec(Node root, int id) {
-        if (root == null) return root;
+        if (root == null)
+            return root;
 
         if (id < root.patient.getPatientId())
             root.left = deleteRec(root.left, id);
         else if (id > root.patient.getPatientId())
             root.right = deleteRec(root.right, id);
         else {
-            if (root.left == null) return root.right;
-            else if (root.right == null) return root.left;
+            if (root.left == null)
+                return root.right;
+            else if (root.right == null)
+                return root.left;
 
             root.patient = minValue(root.right);
             root.right = deleteRec(root.right, root.patient.getPatientId());
@@ -195,14 +208,6 @@ public class DoctorService {
     public static void manageStaff() {
         // Load data from CSV files on startup
         loadDoctors();
-        // List<Doctor> loadedDoctors = new ArrayList<>();
-        // doctorTree.inOrder(loadedDoctors);
-
-        // System.out.println("Doctors loaded into tree:");
-        // for (Doctor d : loadedDoctors) {
-        //     System.out.println(d.getId() + " - " + d.getName());
-        // }
-
         loadPatients();
         loadAppointments();
 
@@ -419,40 +424,40 @@ public class DoctorService {
     public static void searchPatientById(Scanner scanner, PatientBST patientBST) {
         System.out.print("Enter Patient ID to search: ");
         int patId = Integer.parseInt(scanner.nextLine().trim());
-    
+
         // Use the searchById method from the PatientBST class
         Patient pat = patientBST.searchById(patId);
-    
+
         if (pat != null) {
-            System.out.println("Patient found: " + pat.getName() + " (ID: " + pat.getPatientId() + ")");
-            // Optionally display more patient details here
+            System.out.println("Patient found: ");
+            System.out.println(pat.toString());
         } else {
             System.out.println("No patient found with ID " + patId + ".");
         }
-    }    
+    }
 
     /** Search for patients by name (doctor function) */
     public static void searchPatientByName(Scanner scanner, PatientBST patientBST) {
         System.out.print("Enter Patient Name to search: ");
         String name = scanner.nextLine().trim();
-    
+
         List<Patient> patients = new ArrayList<>();
-        patientBST.inOrder(patients);  // Perform in-order traversal to get all patients in sorted order
-    
+        patientBST.inOrder(patients); // Perform in-order traversal to get all patients in sorted order
+
         boolean found = false;
         System.out.println("Search results for name '" + name + "':");
         for (Patient pat : patients) {
             if (pat.getName().equalsIgnoreCase(name)) {
-                System.out.println("- " + pat.getName() + " (ID: " + pat.getPatientId() + ")");
+                System.out.println("Patient Found: ");
+                System.out.println(pat.toString());
                 found = true;
             }
         }
-    
+
         if (!found) {
             System.out.println("No patients found with name '" + name + "'.");
         }
     }
-    
 
     /** Helper to find a Doctor object by ID */
     public static Doctor findDoctorById(String idStr) {
@@ -467,8 +472,8 @@ public class DoctorService {
     /** Helper to find a Patient object by ID */
     public static Patient findPatientById(int id, PatientBST patientBST) {
         List<Patient> allPatients = new ArrayList<>();
-        patientBST.inOrder(allPatients);  // fill the list using in-order traversal
-    
+        patientBST.inOrder(allPatients); // fill the list using in-order traversal
+
         for (Patient p : allPatients) {
             if (p.getPatientId() == id) {
                 return p;
@@ -476,7 +481,6 @@ public class DoctorService {
         }
         return null;
     }
-    
 
     // ****************** ADMINISTRATOR FUNCTIONS ******************
 
@@ -488,7 +492,7 @@ public class DoctorService {
             System.out.println("1. Add Doctor");
             System.out.println("2. Delete Doctor");
             System.out.println("3. Update Doctor");
-            System.out.println("4. View All Doctors (sorted by name)");
+            System.out.println("4. View All Doctors");
             System.out.println("5. Search Doctor by ID");
             System.out.println("6. Search Doctor by Name");
             System.out.println("7. Search Doctor by Specialization");
@@ -559,6 +563,13 @@ public class DoctorService {
         System.out.print("Enter Contact: ");
         String contact = scanner.nextLine().trim();
 
+        // Validate that contact has exactly 10 digits
+        while (!contact.matches("\\d{10}")) {
+            System.out.println("Invalid contact number. Please enter exactly 10 digits.");
+            System.out.print("Enter Contact (10-digit number): ");
+            contact = scanner.nextLine().trim();
+        }
+
         int experience = getIntInput(scanner, "Enter Experience (years): ");
 
         System.out.print("Enter Availability (e.g., Mon-Wed-Fri): ");
@@ -601,7 +612,7 @@ public class DoctorService {
 
     /** Update an existing doctor's details */
     public static void updateDoctor() {
-        Scanner scanner =  new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         System.out.print("Enter Doctor ID to update: ");
         String id = scanner.nextLine().trim();
         Doctor doc = findDoctorById(id);
@@ -631,6 +642,15 @@ public class DoctorService {
             } catch (NumberFormatException e) {
                 System.out.println("Invalid number format. Experience not changed.");
             }
+        }
+        System.out.print("Enter new availability (comma-separated days, e.g., Mon,Wed,Fri) [current: "
+                + String.join(",", doc.getAvailability()) + "]: ");
+        String availInput = scanner.nextLine().trim();
+        if (!availInput.isEmpty()) {
+            String[] newAvailability = Arrays.stream(availInput.split(","))
+                    .map(String::trim)
+                    .toArray(String[]::new);
+            doc.setAvailability(newAvailability);
         }
         saveDoctors();
         System.out.println("Doctor details updated.");
